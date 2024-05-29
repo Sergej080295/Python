@@ -7,6 +7,10 @@
 3. Пользователь может ввести одну из характеристик для поиска определенной
 записи(Например имя или фамилию человека)
 4. Использование функций. Ваша программа не должна быть линейной
+
+Задача 38: Дополнить телефонный справочник возможностью изменения и удаления данных. 
+Пользователь также может ввести имя или фамилию, и Вы должны реализовать функционал 
+для изменения и удаления данных
 '''
 
 # Функция для добавления новой записи
@@ -33,6 +37,36 @@ def search_contact(criteria):
             if criteria in contact:
                 print(line.strip())
 
+# Функция для изменения записи
+def edit_contact():
+    with open('phonebook.txt', 'r') as file:
+        lines = file.readlines()
+    line_number = int(input("Введите номер строки для изменения: "))
+    if 0 < line_number <= len(lines):
+        surname = input("Введите новую фамилию: ")
+        name = input("Введите новое имя: ")
+        patronymic = input("Введите новое отчество: ")
+        phone_number = input("Введите новый номер телефона: ")
+        lines[line_number - 1] = f"{surname}, {name}, {patronymic}, {phone_number}\n"
+        with open('phonebook.txt', 'w') as file:
+            file.writelines(lines)
+        print("Запись успешно изменена.")
+    else:
+        print("Некорректный номер строки.")
+
+# Функция для удаления записи
+def delete_contact():
+    with open('phonebook.txt', 'r') as file:
+        lines = file.readlines()
+    line_number = int(input("Введите номер строки для удаления: "))
+    if 0 < line_number <= len(lines):
+        del lines[line_number - 1]
+        with open('phonebook.txt', 'w') as file:
+            file.writelines(lines)
+        print("Запись успешно удалена.")
+    else:
+        print("Некорректный номер строки.")
+
 # Добавляем возможность копирования контакта
 def copy_contact(source_file, destination_file, line_number):
     with open(source_file, 'r') as source:
@@ -51,7 +85,9 @@ while True:
     print("2. Вывести все записи")
     print("3. Поиск по критерию")
     print("4. Копировать запись в другой файл")
-    print("5. Выход")
+    print("5. Изменить запись")
+    print("6. Удалить запись")
+    print("7. Выход")
 
     choice = input("Выберите действие: ")
 
@@ -68,6 +104,10 @@ while True:
         line_number = int(input("Введите номер строки для копирования: "))
         copy_contact(source_file, destination_file, line_number)
     elif choice == '5':
+        edit_contact()
+    elif choice == '6':
+        delete_contact()
+    elif choice == '7':
         break
     else:
         print("Некорректный выбор. Попробуйте снова.")
